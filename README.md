@@ -4,7 +4,7 @@ Lab01 JFlex Group Project, Compilation I4 GIC, 2026-2027.
 
 | Item | Value |
 |------|-------|
-| Group ID | [GroupID] |
+| Group ID | [14] |
 | Members | [HUONG PHYNANN, e20230363], [KRIYA MUSTAFA, e20230474], [CHEA SOMANARATH, e20230356] |
 | JDK | OpenJDK 21.0.12 (any JDK 11+ should work) |
 | JFlex | 1.9.1 (`lib/jflex-full-1.9.1.jar`, included so nothing needs the internet) |
