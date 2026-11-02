@@ -1,0 +1,9 @@
+TYPE         LEXEME                    LINE   COL
+KEYWORD      add                          1     1
+SEMICOLON    ;                            1     4
+IDENTIFIER   added                        2     1
+KEYWORD      add                          2     7
+LE           <=                           3     1
+KEYWORD      list                         4     1
+EOF          <EOF>                        4     5
+Summary: 6 tokens, 0 errors

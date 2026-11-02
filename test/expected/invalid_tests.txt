@@ -1,0 +1,17 @@
+TYPE         LEXEME                    LINE   COL
+KEYWORD      add                          1     1
+ERROR        @                            1     5  unexpected character '@'
+SEMICOLON    ;                            1     6
+KEYWORD      add                          2     1
+ERROR        "Read                        2     5  unterminated string literal
+KEYWORD      list                         3     1
+ERROR        $                            3     6  unexpected character '$'
+IDENTIFIER   x                            3     7
+SEMICOLON    ;                            3     8
+KEYWORD      done                         4     1
+IDENTIFIER   t1                           4     6
+ERROR        !                            4     9  unexpected character '!'
+INTEGER      3                            4    11
+SEMICOLON    ;                            4    12
+EOF          <EOF>                        4    13
+Summary: 10 tokens, 4 errors

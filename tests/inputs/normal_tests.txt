@@ -1,0 +1,8 @@
+add task_7 "Read chapter 4";
+done task_7;
+list priority >= 3;
+delete a, b, c;
+# my tasks
+list;
+add t1 "A";
+done t1;

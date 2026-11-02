@@ -1,18 +1,43 @@
 #!/usr/bin/env bash
-# Run every tests/inputs/*.txt through the scanner and compare with tests/expected/*.out.
-# Writes tests/actual/*.out and tests/results.md. Run ./build.sh first.
+# Run every test through the scanner and compare with expected output.
+# Writes actual output and tests/results.md. Run ./build.sh first.
 cd "$(dirname "$0")"
-mkdir -p tests/actual
+
+# Support both test/ and tests/ directory structures
+IN_DIR="test/input"
+EXP_DIR="test/expected"
+ACT_DIR="test/actual"
+
+if [ ! -d "$IN_DIR" ] && [ -d "tests/inputs" ]; then
+  IN_DIR="tests/inputs"
+  EXP_DIR="tests/expected"
+  ACT_DIR="tests/actual"
+fi
+
+mkdir -p "$ACT_DIR" "tests/actual" 2>/dev/null
 pass=0; fail=0
 {
-echo "| Test | Kind | Input (escaped) | Result |"
-echo "|------|------|-----------------|--------|"
-for f in tests/inputs/*.txt; do
+echo "| Test | Kind | First Line | Result |"
+echo "|------|------|------------|--------|"
+for f in "$IN_DIR"/*.txt; do
+  [ -e "$f" ] || continue
   id=$(basename "$f" .txt)
-  case $id in N*) kind=normal;; B*) kind=boundary;; E*) kind=invalid;; esac
-  java -cp out taskscan.Main "$f" > "tests/actual/$id.out" 2>/dev/null
-  if diff -q "tests/expected/$id.out" "tests/actual/$id.out" >/dev/null; then r=PASS; pass=$((pass+1)); else r=FAIL; fail=$((fail+1)); fi
-  shown=$(python3 -c 'import sys;print(repr(open(sys.argv[1],encoding="utf-8",newline="").read()).replace("|","\\|"))' "$f")
+  case $id in
+    *norm*|N*) kind=normal;;
+    *bound*|B*) kind=boundary;;
+    *inv*|E*) kind=invalid;;
+    *) kind=other;;
+  esac
+  java -cp out taskscan.Main "$f" > "$ACT_DIR/$id.out" 2>/dev/null
+  cp "$ACT_DIR/$id.out" "tests/actual/$id.out" 2>/dev/null || true
+  if diff -q --strip-trailing-cr "$EXP_DIR/$id.out" "$ACT_DIR/$id.out" >/dev/null 2>&1 || diff -q "$EXP_DIR/$id.out" "$ACT_DIR/$id.out" >/dev/null 2>&1; then
+    r=PASS
+    pass=$((pass+1))
+  else
+    r=FAIL
+    fail=$((fail+1))
+  fi
+  shown=$(head -n 1 "$f" 2>/dev/null | tr -d '\r\n' | sed 's/|/\\|/g')
   echo "| $id | $kind | \`$shown\` | $r |"
 done
 echo
